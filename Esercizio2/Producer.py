@@ -1,5 +1,4 @@
-from Process import Process
-from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
+from Esercizio2.Process import Process
 from TdP_collections.queue.array_queue import ArrayQueue
 from TdP_collections.queue.array_queue import Empty
 
