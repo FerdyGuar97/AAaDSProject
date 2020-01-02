@@ -1,8 +1,10 @@
 from Process import Process
 from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
+from TdP_collections.queue.array_queue import ArrayQueue
+from TdP_collections.queue.array_queue import Empty
 
 def readAndPrint():
-    file = open("ciccio", "r")
+    file = open("commands", "r")
 
     for line in file:
         tmp = line.rstrip("\n").split(" ")
@@ -12,16 +14,37 @@ def readAndPrint():
         scheduler_arrive = tmp[3]
        # print(scheduler_process, scheduler_priority, scheduler_length, scheduler_arrive)
 
-def load(fileName: str):
+def loadFromFile(fileName: str):
+
     file = open(fileName, "r")
-    queue = AdaptableHeapPriorityQueue()
-    loc={}
+    queue = ArrayQueue()
+    firstIteration = True
+
     for line in file:
+        if firstIteration:
+            x = (int)(line.rstrip("\n"))
+            firstIteration = False
+        else:
+            queue.enqueue(line.rstrip("\n"))
+
+    return queue, x
+
+def readNext(queue: ArrayQueue, waitingTimesMap, scheduleQueue):
+
+    try:
+        line = (str)(queue.dequeue())
+    except Empty as exception:
+        return False
+
+
+
+    if not line.rstrip("\n") == "no new job this slice":
         tmp = line.rstrip("\n").split(" ")
-        scheduler_process = tmp[0]
-        scheduler_priority = int(tmp[1])
-        scheduler_length = int(tmp[2])
-        scheduler_arrive = int(tmp[3])
+        scheduler_process = tmp[2]
+        scheduler_length = int(tmp[5])
+        scheduler_priority = int(tmp[8])
+
         p = Process(scheduler_process, scheduler_priority, scheduler_length)
-        loc[queue.add(p.priority, p)] = 0
-    return queue, loc
+        waitingTimesMap[scheduleQueue.add(p.priority, p)] = 0
+
+    return True

@@ -2,12 +2,13 @@
 import Producer
 import time
 import Process
+from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
 
 
 def test(timeslice: int):
 
     Producer.readAndPrint()
-    queue, loc = Producer.load("ciccio")
+    queue, loc = Producer.load("commands")
     actProcess = queue.remove_min()[1]
     remainingTimeSlices = actProcess.timeSlices
 
@@ -40,12 +41,39 @@ def queueupdate(waitingTimesMap, queue, maxWaitingTime):
                 waitingTimesMap[locator] = 0
             except ValueError as error:
                 toRemove.append(locator)
-    print(waitingTimesMap)
-    print("\n")
-
     for x in toRemove:
         waitingTimesMap.pop(x)
 
+def test2():
+
+    commandQueue, x = Producer.loadFromFile("commands")
+    waitingTimesMap = {}
+    scheduleQueue = AdaptableHeapPriorityQueue()
+    actProcess = None
+    remainingTimeSlices = 0
+
+    while Producer.readNext(commandQueue, waitingTimesMap, scheduleQueue) or not scheduleQueue.is_empty() or remainingTimeSlices > 0:
+
+        if not scheduleQueue.is_empty() and remainingTimeSlices <= 0:
+            actProcess = scheduleQueue.remove_min()[1]
+            remainingTimeSlices = actProcess.timeSlices
+
+        elif scheduleQueue.is_empty() and actProcess is None:
+            print("No job running")
+
+        if remainingTimeSlices <= 0:
+            actProcess = None
+        else:
+            print("Executing " + actProcess.name)
+            remainingTimeSlices -= 1
+        queueupdate(waitingTimesMap, scheduleQueue, x)
+
+        time.sleep(2)
+
+    print("No more commands")
+
 
 if __name__ == '__main__':
-    test(2)
+   # test(2)
+    test2()
+

@@ -1,0 +1,24 @@
+2
+add job P1 with length 8 and priority -5
+no new job this slice
+add job P2 with length 1 and priority 16
+add job P3 with length 5 and priority 2
+no new job this slice
+no new job this slice
+add job P4 with length 5 and priority 10
+no new job this slice
+add job P5 with length 9 and priority -19
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
+add job P6 with length 5 and priority 19
+no new job this slice
+no new job this slice
+no new job this slice
+no new job this slice
