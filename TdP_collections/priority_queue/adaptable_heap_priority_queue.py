@@ -33,6 +33,8 @@ class AdaptableHeapPriorityQueue(HeapPriorityQueue):
       super().__init__(k,v)
       self._index = j
 
+    def __repr__(self):
+      return '({0},{1},{2})'.format(self._index,self._key, self._value)
   #------------------------------ nonpublic behaviors ------------------------------
   # override swap to record new indices
   def _swap(self, i, j):
@@ -49,7 +51,7 @@ class AdaptableHeapPriorityQueue(HeapPriorityQueue):
   #------------------------------ public behaviors ------------------------------
   def add(self, key, value):
     """Add a key-value pair."""
-    token = self.Locator(key, value, len(self._data)) # initiaize locator index
+    token = self.Locator(key, value, len(self._data))  # initialize locator index
     self._data.append(token)
     self._upheap(len(self._data) - 1)
     return token

@@ -6,12 +6,3 @@ class Process:
         self.name=name
         self.priority=priority
         self.timeSlices=timeSlices
-
-    def getName(self) -> str:
-        return self.name
-
-    def getPriority(self) -> int:
-        return self.priority
-
-    def getTimeSlices(self) -> int:
-        return self.timeSlices
