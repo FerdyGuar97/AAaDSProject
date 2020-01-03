@@ -1,7 +1,7 @@
 # Author: Aric Hagberg (hagberg@lanl.gov)
 from TdP_collections.graphs.graph import Graph
 from random import Random
-from exercise3.iterative_dfs import iterative_dfs
+from Exercise3.iterative_dfs import iterative_dfs
 from TdP_collections.graphs.dfs import DFS
 
 def main(n: int):

@@ -1,4 +1,4 @@
-from Esercizio2.Process import Process
+from Exercise2.Process import Process
 from TdP_collections.queue.array_queue import ArrayQueue
 from TdP_collections.queue.array_queue import Empty
 

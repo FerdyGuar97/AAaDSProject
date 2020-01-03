@@ -1,4 +1,4 @@
-from Esercizio2 import Producer
+from Exercise2 import Producer
 import time
 from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
 
