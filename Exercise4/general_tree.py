@@ -1,7 +1,7 @@
 from TdP_collections.tree.tree import Tree
 
 
-class NTree(Tree):
+class GeneralTree(Tree):
     class _Node:
         __slots__ = '_element', '_parent', '_children'
 
@@ -78,7 +78,8 @@ class NTree(Tree):
         return len(p._node._children)
 
     def children(self, p):
-        return p._node._children
+        for c in p._node._children:
+            yield self._make_position(c)
 
     def __len__(self):
         return self._size
