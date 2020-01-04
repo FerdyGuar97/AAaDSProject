@@ -5,10 +5,13 @@ class GeneralTree(Tree):
     class _Node:
         __slots__ = '_element', '_parent', '_children'
 
-        def __init__(self, element, parent=None, children=[]):
+        def __init__(self, element, parent=None, children=None):
             self._element = element
-            self._children = children
+            self._children = children if children else []
             self._parent = parent
+
+        def __repr__(self):
+            print("{} -> Parent:{} num_children:{}".format(self._element,self._parent._element,len(self._children)))
 
     # -------------------------- nested Position class --------------------------
     class Position(Tree.Position):
@@ -53,6 +56,7 @@ class GeneralTree(Tree):
         parent_node = self._validate(p)
         new_node = self._Node(e, parent_node)
         parent_node._children.append(new_node)
+        print("Now "+str(new_node._element)+" is a child of "+str(parent_node._element))
         self._size += 1
         return self._make_position(new_node)
 
@@ -78,8 +82,10 @@ class GeneralTree(Tree):
         return len(p._node._children)
 
     def children(self, p):
+        self._validate(p)
         for c in p._node._children:
-            yield self._make_position(c)
+            if c is not None:
+                yield self._make_position(c)
 
     def __len__(self):
         return self._size
