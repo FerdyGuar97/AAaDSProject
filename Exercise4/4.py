@@ -54,7 +54,6 @@ def main():
     q = tree.add('Q', o)
     r = tree.add('R', p)
 
-    sys.setrecursionlimit(10000)
     print(algorithm(tree, a))
 
     for p in tree.preorder():
