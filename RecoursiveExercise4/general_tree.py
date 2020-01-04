@@ -10,6 +10,15 @@ class GeneralTree(Tree):
             self._children = children if children else []
             self._parent = parent
 
+        def __hash__(self):
+            return id(self)
+
+        def __eq__(self, other):
+            return other.__hash__() == self.__hash__()
+
+        def __ne__(self, other):
+            return not self == other
+
         def __repr__(self):
             print("{} -> Parent:{} num_children:{}".format(self._element,self._parent._element,len(self._children)))
 
@@ -29,6 +38,18 @@ class GeneralTree(Tree):
         def __eq__(self, other):
             """Return True if other is a Position representing the same location."""
             return type(other) is type(self) and other._node is self._node
+
+        def __hash__(self):
+            return self._node.__hash__()
+
+        def __eq__(self, other):
+            return other.__hash__() == self.__hash__()
+
+        def __ne__(self, other):
+            return not self == other
+
+        def __repr__(self):
+            return "{}".format(self.element())
 
     def __init__(self):
         self._root = None
