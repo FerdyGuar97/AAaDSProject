@@ -2,7 +2,7 @@ from TdP_collections.graphs.graph import Graph
 from random import Random
 
 
-def main(n: int):
+def graph_randomize(n: int):
     graph = Graph()
     random = Random()
     vertices = []
@@ -25,5 +25,5 @@ def main(n: int):
                 do = False
 
     print("number of vertices "+str(graph.vertex_count())+"\nnumber of edges "+str(graph.edge_count()))
-if __name__ == '__main__':
-    main(100)
+
+    return graph, vertices[0] #return graph data structure and the first node
