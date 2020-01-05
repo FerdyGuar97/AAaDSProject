@@ -1,13 +1,12 @@
-# Author: Aric Hagberg (hagberg@lanl.gov)
+from Exercise3.ImprovedExercise3.adja_list_graph import AdjListGraph
+from random import Random
+from Exercise3.ImprovedExercise3.improved_iterative_dfs import iterative_dfs
+from TdP_collections.graphs.dfs import DFS
 from time import time, sleep
 
-from TdP_collections.graphs.graph import Graph
-from random import Random
-from Exercise3.iterative_dfs import iterative_dfs
-from TdP_collections.graphs.dfs import DFS
 
 def main(n: int):
-    graph = Graph()
+    graph = AdjListGraph()
     random = Random()
     vertices = []
 
@@ -31,7 +30,7 @@ def main(n: int):
     plot_graph(graph)
     start_time = time()
     sleep(1)
-    iterative_dfs(vertices[0], graph)
+    iterative_dfs(vertices[0],graph)
     print(time() - start_time)
     plot_graph(graph)
     
@@ -46,7 +45,7 @@ def main(n: int):
 import matplotlib.pyplot as plt
 import networkx as nx
 
-def plot_graph(graph: Graph):
+def plot_graph(graph: AdjListGraph):
     G = nx.Graph()
 
     for edge in graph.edges():
