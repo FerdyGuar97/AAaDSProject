@@ -4,7 +4,8 @@ from TdP_collections.priority_queue.adaptable_heap_priority_queue import Adaptab
 
 
 def test(timeslice: int):
-
+    # first we load command from file in a
+    # auxiliary data structure
     Producer.readAndPrint()
     queue, loc = Producer.load("commands")
     actProcess = queue.remove_min()[1]
@@ -21,16 +22,17 @@ def test(timeslice: int):
             actProcess = queue.remove_min()[1]
             remainingTimeSlices = actProcess.timeSlices
         elif remainingTimeSlices <= 0:
-            actProcess= None
+            actProcess = None
         queueupdate(loc, queue, timeslice)
 
 
 def queueupdate(waitingTimesMap, queue, maxWaitingTime):
+    """Update of priority of processes in the priority queue due to time waited"""
 
     toRemove = []
 
     for locator in waitingTimesMap:
-        waitingTimesMap[locator]+=1
+        waitingTimesMap[locator] += 1
         if waitingTimesMap[locator] >= maxWaitingTime:
             if locator._value.priority >= -19:
                 locator._value.priority -= 1
@@ -42,15 +44,28 @@ def queueupdate(waitingTimesMap, queue, maxWaitingTime):
     for x in toRemove:
         waitingTimesMap.pop(x)
 
-def test2():
 
+def test2():
+    """
+        test class with while loop
+
+        end of test is:
+
+        -no more command in array queue
+        -no more process in priority queue
+        -no running process
+
+        each iteration check which process priorities to update
+
+    """
     commandQueue, x = Producer.loadFromFile("commands")
     waitingTimesMap = {}
     scheduleQueue = AdaptableHeapPriorityQueue()
     actProcess = None
     remainingTimeSlices = 0
 
-    while Producer.readNext(commandQueue, waitingTimesMap, scheduleQueue) or not scheduleQueue.is_empty() or remainingTimeSlices > 0:
+    while Producer.readNext(commandQueue, waitingTimesMap,
+                            scheduleQueue) or not scheduleQueue.is_empty() or remainingTimeSlices > 0:
 
         if not scheduleQueue.is_empty() and remainingTimeSlices <= 0:
             actProcess = scheduleQueue.remove_min()[1]
@@ -72,6 +87,5 @@ def test2():
 
 
 if __name__ == '__main__':
-   # test(2)
+    # test(2)
     test2()
-
