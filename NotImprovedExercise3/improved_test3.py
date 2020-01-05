@@ -1,9 +1,8 @@
-from Exercise3.ImprovedExercise3.adja_list_graph import AdjListGraph
+from NotImprovedExercise3.adja_list_graph import AdjListGraph
 from random import Random
-from Exercise3.ImprovedExercise3.improved_iterative_dfs import iterative_dfs
+from NotImprovedExercise3.improved_iterative_dfs import iterative_dfs
 from TdP_collections.graphs.dfs import DFS
 from time import time, sleep
-
 
 def main(n: int):
     graph = AdjListGraph()
@@ -36,7 +35,7 @@ def main(n: int):
     
     discovered = {}
     DFS(graph,vertices[0],discovered)
-    for v in graph.vertices():
+    for v in discovered:
         v.discovered = True
         v.discovery_edge = discovered[v]
     plot_graph(graph)

@@ -6,17 +6,18 @@ from random import Random
 from Exercise3.iterative_dfs import iterative_dfs
 from TdP_collections.graphs.dfs import DFS
 
+
 def main(n: int):
     graph = Graph()
     random = Random()
     vertices = []
 
-    for i in range(0,n):
+    for i in range(0, n):
         vertices.append(graph.insert_vertex(i))
-    print("Root:"+str(vertices[0]._element))
+    print("Root:" + str(vertices[0]._element))
 
-    for a in range(0,len(vertices)):
-        for i in range(0,random.randint(1,3)):
+    for a in range(0, len(vertices)):
+        for i in range(0, random.randint(1, 3)):
             do = True
             while do:
                 b = random.randint(0, len(vertices) - 1)
@@ -34,23 +35,26 @@ def main(n: int):
     iterative_dfs(vertices[0], graph)
     print(time() - start_time)
     plot_graph(graph)
-    
+
     discovered = {}
-    DFS(graph,vertices[0],discovered)
-    for v in graph.vertices():
+    DFS(graph, vertices[0], discovered)
+    for v in discovered:
         v.discovered = True
         v.discovery_edge = discovered[v]
     plot_graph(graph)
     print("FINO ALLA FINE")
 
+
 import matplotlib.pyplot as plt
 import networkx as nx
+
 
 def plot_graph(graph: Graph):
     G = nx.Graph()
 
     for edge in graph.edges():
-        G.add_edge(edge._origin._element, edge._destination._element, discovered = (edge._destination.discovery_edge == edge or edge._origin.discovery_edge == edge))
+        G.add_edge(edge._origin._element, edge._destination._element,
+                   discovered=(edge._destination.discovery_edge == edge or edge._origin.discovery_edge == edge))
 
     elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['discovered'] == True]
     esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['discovered'] == False]
@@ -71,6 +75,7 @@ def plot_graph(graph: Graph):
 
     plt.axis('off')
     plt.show()
+
 
 if __name__ == '__main__':
     main(10)

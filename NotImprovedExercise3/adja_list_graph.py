@@ -46,6 +46,9 @@ class AdjListGraph:
     def __str__(self):
       return str(self._element)
 
+    def __repr__(self):
+      return self.__str__()
+
   #------------------------- nested Edge class -------------------------
   class Edge:
     """Lightweight edge structure for a graph."""
