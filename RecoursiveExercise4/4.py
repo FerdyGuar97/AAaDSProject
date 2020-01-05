@@ -56,7 +56,6 @@ def main():
     q = tree.add('Q', o)
     r = tree.add('R', p)
 
-
     print(algorithm(tree, a))
 
     for p in tree.preorder():

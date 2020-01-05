@@ -3,15 +3,23 @@ import time
 
 
 def bacefook_algorithm(tree: GeneralTree, root: GeneralTree.Position):
-    best = {i: [0, 0] for i in tree.postorder()}
+    best = {i: [0, 0] for i in tree.children(root)}
+
+    # La tabella deve essere intepretata come segue:
+    # Ogni colonna rappresenta un nodo figlio di root,
+    # ed in ogni cella è contenuto il numero di software
+    # installati nel relativo sotto-albero considerando
+    # tale figlio (root del sotto-albero) con il software installato
+    # se l'indice è 1 (best[c][1]), oppure senza consideralo
+    # installato su di esso (best[c][0])
 
     for c in tree.children(root):
         best[c][0], best[c][1] = bacefook_algorithm(tree, c)
 
     withoutRoot = sum(best[c][1] for c in tree.children(root))
     withRoot = 1 + sum(min(best[c][0], best[c][1]) for c in tree.children(root))
-
     return (withoutRoot, withRoot)
+
 
 def main():
     time.sleep(1)
@@ -34,6 +42,7 @@ def main():
     r = tree.add('R', p)
 
     min(bacefook_algorithm(tree, a))
+
 
 if __name__ == '__main__':
     start_time = time.time()
