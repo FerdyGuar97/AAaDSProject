@@ -26,4 +26,4 @@ def graph_randomize(n: int):
 
     print("number of vertices "+str(graph.vertex_count())+"\nnumber of edges "+str(graph.edge_count()))
 
-    return graph, vertices[0] #return graph data structure and the first node
+    return graph

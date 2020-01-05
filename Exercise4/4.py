@@ -2,8 +2,7 @@ from RecoursiveExercise4.general_tree import GeneralTree
 import time
 
 
-def bacefook_algorithm(tree: GeneralTree, root: GeneralTree.Position):
-    best = {i: [0, 0] for i in tree.children(root)}
+def bacefook_algorithm(tree: GeneralTree, root: GeneralTree.Position, best):
 
     # La tabella deve essere intepretata come segue:
     # Ogni colonna rappresenta un nodo figlio di root,
@@ -14,10 +13,10 @@ def bacefook_algorithm(tree: GeneralTree, root: GeneralTree.Position):
     # installato su di esso (best[c][0])
 
     for c in tree.children(root):
-        best[c][0], best[c][1] = bacefook_algorithm(tree, c)
+        best[c][False], best[c][True] = bacefook_algorithm(tree, c,best)
 
-    withoutRoot = sum(best[c][1] for c in tree.children(root))
-    withRoot = 1 + sum(min(best[c][0], best[c][1]) for c in tree.children(root))
+    withoutRoot = sum(best[c][True] for c in tree.children(root))
+    withRoot = 1 + sum(min(best[c][False], best[c][True]) for c in tree.children(root))
     return (withoutRoot, withRoot)
 
 
@@ -41,8 +40,9 @@ def main():
     q = tree.add('Q', o)
     r = tree.add('R', p)
 
-    min(bacefook_algorithm(tree, a))
-
+    best = {i: {False: 0, True: 0} for i in tree.postorder()}
+    print(min(bacefook_algorithm(tree, a, best)))
+    print(best)
 
 if __name__ == '__main__':
     start_time = time.time()
