@@ -5,11 +5,11 @@ from random import Random
 def graph_randomize(n: int):
     graph = Graph()
     random = Random()
+    # This structure allows us to pick vertex randomly
     vertices = []
 
     for i in range(0,n):
-        vertices.append(graph.insert_vertex(i))
-    #print("Root:"+str(vertices[0]._element))
+        graph.insert_vertex(i)
 
     for a in range(0,len(vertices)):
         for i in range(0,random.randint(1,3)):
