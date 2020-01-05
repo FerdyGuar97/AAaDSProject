@@ -4,21 +4,21 @@ from TdP_collections.graphs.graph import Graph
 def iterative_dfs(rootNode, graph):
     """Perform DFS of the undiscovered portion of Graph g starting at Vertex u."""
     rootNode.discovered = True
-    rootNode.discoveryEdge = Graph.Edge(rootNode, None, None)  # Dummy edge
+    rootNode.discovery_edge = Graph.Edge(rootNode, None, None)  # Dummy edge
     walk = rootNode
 
-    while walk != None:
-        hasToGoBack = True
+    while walk is not None:
+        has_to_go_back = True
         for edge in graph.incident_edges(walk):
             opposite = edge.opposite(walk)
             if not opposite.discovered:
                 opposite.discovered = True
-                opposite.discoveryEdge = edge
+                opposite.discovery_edge = edge
                 walk = opposite
-                hasToGoBack = False
+                has_to_go_back = False
                 break
 
-        if hasToGoBack:
-            walk = walk.discoveryEdge.opposite(walk)
+        if has_to_go_back:
+            walk = walk.discovery_edge.opposite(walk)
 
-    rootNode.discoveryEdge = None  # Remove dummy edge
+    rootNode.discovery_edge = None  # Remove dummy edge

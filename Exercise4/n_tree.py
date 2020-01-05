@@ -1,7 +1,7 @@
 from TdP_collections.tree.tree import Tree
 
 
-class GeneralTree(Tree):
+class NTree(Tree):
     class _Node:
         __slots__ = '_element', '_parent', '_children'
 

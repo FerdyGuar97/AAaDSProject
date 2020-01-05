@@ -1,11 +1,11 @@
 from Exercise4.bacefook_dynamic_algorithm import bacefook_dynamic_algorithm
-from Exercise4.general_tree import GeneralTree
+from Exercise4.n_tree import NTree
 import time
 
 
 def main():
     time.sleep(1)
-    tree = GeneralTree()
+    tree = NTree()
     a = tree.add('A')
     b = tree.add('B', a)
     c = tree.add('C', a)

@@ -38,7 +38,7 @@ def main(n: int):
     DFS(graph,vertices[0],discovered)
     for v in graph.vertices():
         v.discovered = True
-        v.discoveryEdge = discovered[v]
+        v.discovery_edge = discovered[v]
     plot_graph(graph)
     print("FINO ALLA FINE")
 
@@ -49,7 +49,7 @@ def plot_graph(graph: AdjListGraph):
     G = nx.Graph()
 
     for edge in graph.edges():
-        G.add_edge(edge._origin._element, edge._destination._element, discovered = (edge._destination.discoveryEdge == edge or edge._origin.discoveryEdge == edge))
+        G.add_edge(edge._origin._element, edge._destination._element, discovered = (edge._destination.discovery_edge == edge or edge._origin.discovery_edge == edge))
 
     elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['discovered'] == True]
     esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['discovered'] == False]

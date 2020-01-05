@@ -1,7 +1,7 @@
-from Exercise4.general_tree import GeneralTree
+from Exercise4.n_tree import NTree
 
 
-def bacefook_minimum_softwares(tree: GeneralTree, root: GeneralTree.Position, best):
+def bacefook_minimum_softwares(tree: NTree, root: NTree.Position, best):
     # La tabella deve essere intepretata come segue:
     # Ogni colonna rappresenta un nodo figlio di root,
     # ed in ogni cella è contenuto il numero di software
@@ -18,7 +18,7 @@ def bacefook_minimum_softwares(tree: GeneralTree, root: GeneralTree.Position, be
     return yes_software + 1, no_software
 
 
-def bacefook_dynamic_algorithm(tree: GeneralTree):
+def bacefook_dynamic_algorithm(tree: NTree):
     best = {i: {True: 0, False: 0} for i in tree.preorder()}
     best[tree.root()][True], best[tree.root()][False] = bacefook_minimum_softwares(tree, tree.root(), best)
     return best

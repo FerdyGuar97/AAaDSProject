@@ -25,14 +25,14 @@ class Graph:
   #------------------------- nested Vertex class -------------------------
   class Vertex:
     """Lightweight vertex structure for a graph."""
-    __slots__ = '_element','discovered','discoveryEdge'
+    __slots__ = '_element','discovered', 'discovery_edge'
 
 
     def __init__(self, x):
       """Do not call constructor directly. Use Graph's insert_vertex(x)."""
       self._element = x
       self.discovered = False
-      self.discoveryEdge = None
+      self.discovery_edge = None
 
     def element(self):
       """Return element associated with this vertex."""
