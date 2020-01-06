@@ -9,6 +9,9 @@ def main():
     tree.add('f')
     for p in tree.preorder():
         print(p._node._elements)
+    tree.delete('a')
+    for p in tree.preorder():
+        print(p._node._elements)
 
 
 if __name__ == '__main__':
