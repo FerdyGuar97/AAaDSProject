@@ -77,7 +77,7 @@ class NTree(Tree):
         parent_node = self._validate(p)
         new_node = self._Node(e, parent_node)
         parent_node._children.append(new_node)
-        print("Now "+str(new_node._element)+" is a child of "+str(parent_node._element))
+        # print("Now "+str(new_node._element)+" is a child of "+str(parent_node._element))
         self._size += 1
         return self._make_position(new_node)
 

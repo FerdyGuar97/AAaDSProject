@@ -7,9 +7,28 @@ from TdP_collections.graphs.dfs import DFS
 
 
 def main(n: int):
+    """
+        create a graph and call generate graph
+        then call iterative DFS and DFS from TdP_collection
+    """
     graph = Graph()
-    random = Random()
     vertices = []
+
+    generate_graph(graph, vertices, n)
+    start_time = time()
+    sleep(1)
+    iterative_dfs(vertices[0], graph)
+    print(time() - start_time)
+
+    discovered = {}
+    DFS(graph, vertices[0], discovered)
+    for v in discovered:
+        v.discovered = True
+        v.discovery_edge = discovered[v]
+
+
+def generate_graph(graph: Graph, vertices: [], n: int):
+    random = Random()
 
     for i in range(0, n):
         vertices.append(graph.insert_vertex(i))
@@ -27,53 +46,6 @@ def main(n: int):
                 except ValueError:
                     continue
                 do = False
-
-    plot_graph(graph)
-    start_time = time()
-    sleep(1)
-    iterative_dfs(vertices[0], graph)
-    print(time() - start_time)
-    plot_graph(graph)
-
-    discovered = {}
-    DFS(graph, vertices[0], discovered)
-    for v in discovered:
-        v.discovered = True
-        v.discovery_edge = discovered[v]
-    plot_graph(graph)
-    print("FINO ALLA FINE")
-
-
-import matplotlib.pyplot as plt
-import networkx as nx
-
-
-def plot_graph(graph: Graph):
-    G = nx.Graph()
-
-    for edge in graph.edges():
-        G.add_edge(edge._origin._element, edge._destination._element,
-                   discovered=(edge._destination.discovery_edge == edge or edge._origin.discovery_edge == edge))
-
-    elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['discovered'] == True]
-    esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['discovered'] == False]
-
-    pos = nx.spring_layout(G)  # positions for all nodes
-
-    # nodes
-    nx.draw_networkx_nodes(G, pos, node_size=700)
-
-    # edges
-    nx.draw_networkx_edges(G, pos, edgelist=elarge,
-                           width=6)
-    nx.draw_networkx_edges(G, pos, edgelist=esmall,
-                           width=6, alpha=0.5, edge_color='b', style='dashed')
-
-    # labels
-    nx.draw_networkx_labels(G, pos, font_size=20, font_family='sans-serif')
-
-    plt.axis('off')
-    plt.show()
 
 
 if __name__ == '__main__':
