@@ -28,6 +28,8 @@ def bacefook_greedy_algorithm(graph: Graph):
 
     for i in range(0, graph.vertex_count()):
         k, v = priority_queue.remove_min()
+        if graph.degree(v) == 0:
+            continue
         if k == 0:
             break
         map[v]['has_sw'] = True

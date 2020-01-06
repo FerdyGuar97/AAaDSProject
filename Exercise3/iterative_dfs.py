@@ -2,7 +2,8 @@ from TdP_collections.graphs.graph import Graph
 
 
 def iterative_dfs(starting_vertex, graph):
-    """Perform DFS of the undiscovered portion of Graph g starting at Vertex u."""
+    """Perform DFS of the undiscovered portion of Graph g starting at Vertex u.
+    It takes O(sum(degree(v)^2) + V)"""
     starting_vertex.discovered = True
     starting_vertex.discovery_edge = Graph.Edge(starting_vertex, None, None)  # Dummy edge
     walk = starting_vertex

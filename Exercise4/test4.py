@@ -1,10 +1,8 @@
 from Exercise4.bacefook_dynamic_algorithm import bacefook_dynamic_algorithm
 from Exercise4.n_tree import NTree
-import time
 
 
 def main():
-    time.sleep(1)
     tree = NTree()
     a = tree.add('A')
     b = tree.add('B', a)
@@ -23,11 +21,23 @@ def main():
     q = tree.add('Q', o)
     r = tree.add('R', p)
 
-    print(bacefook_dynamic_algorithm(tree))
+    map = bacefook_dynamic_algorithm(tree)
+    string = ' '*len('False')
+    true_string = 'True '
+    false_string = 'False'
+    for k in map:
+        string += "| {} ".format(k)
+    for k in map:
+        true_string += "|{:3d}".format(map[k][True])
+        false_string += "|{:3d}".format(map[k][False])
+
+
+    print(string+"|")
+    print(true_string+"|")
+    print(false_string+"|")
+    print("Minimum number of software: ",min(map[tree.root()].values()))
 
 
 
 if __name__ == '__main__':
-    start_time = time.time()
     main()
-    print(time.time() - start_time)

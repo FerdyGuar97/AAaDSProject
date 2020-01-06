@@ -2,21 +2,12 @@ from Exercise2.Process import Process
 from TdP_collections.queue.array_queue import ArrayQueue
 from TdP_collections.queue.array_queue import Empty
 
-def readAndPrint():
-    """test method in which we open, read and print the contents of a text file"""
-
-    file = open("commands", "r")
-    for line in file:
-        tmp = line.rstrip("\n").split(" ")
-        scheduler_process = tmp[0]
-        scheduler_priority = tmp[1]
-        scheduler_length = tmp[2]
-        scheduler_arrive = tmp[3]
-       # print(scheduler_process, scheduler_priority, scheduler_length, scheduler_arrive)
 
 
 def loadFromFile(fileName: str):
-    """Load command from file into an ArrayQueue"""
+    """Load command from file into an ArrayQueue.
+    The first line contain an integer which is the max number of time-slices a process has to wait
+    before its priority is increased by one (decreased in our case)"""
 
     file = open(fileName, "r")
     queue = ArrayQueue()

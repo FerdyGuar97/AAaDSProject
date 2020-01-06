@@ -1,15 +1,49 @@
-from Exercise1.multiway_tree import MultiwayTree
 from math import ceil
+from TdP_collections.map.map_base import MapBase
+from TdP_collections.tree.tree import Tree
 
-class BTree(MultiwayTree):
+
+class BTree(Tree, MapBase):
+    def __iter__(self):
+        for p in self.preorder():
+            for e in p._node._elements:
+                yield e._key
+
+    def __setitem__(self, k, v) -> None:
+        p = self._search(self._Item(k, None),self._root)
+        try:
+            p.element()._value = v
+        except:
+            self._insert(self._Item(k, v))
+
+    def __delitem__(self, v) -> None:
+        self._remove(self._Item(v,None))
+
+    def __getitem__(self, k):
+        """Return value associated with key k (raise KeyError if not found)."""
+        if self._size == 0:
+            raise KeyError()
+        p = self._search(self._Item(k, None),self._root)
+        try:
+            return p.element()._value
+        except IndexError:
+            raise KeyError()
 
     def root(self):
-        return self._make_position(self._root,0)
+        return self._make_position(self._root, 0)
 
     def children(self, p):
         for c in p._node._children:
             if c is not None:
-                yield self._make_position(c,0)
+                yield self._make_position(c, 0)
+
+    class _Item(MapBase._Item):
+
+        def __le__(self, other):
+            return self == other or self < other
+
+        def __ge__(self, other):
+            return self == other or self > other
 
     # -------------------------- nested Node class --------------------------
     class _Node:
@@ -19,10 +53,10 @@ class BTree(MultiwayTree):
         def __init__(self, elements, parent=None, children=None):
             self._parent = parent
             self._elements = elements
-            self._children = children if children else [None for i in range(0,len(elements)+1)]
+            self._children = children if children else [None for i in range(0, len(elements) + 1)]
 
     # -------------------------- nested Position class --------------------------
-    class Position(MultiwayTree.Position):
+    class Position(Tree.Position):
         """An abstraction representing the location of a single element."""
 
         def __init__(self, container, node, index):
@@ -45,8 +79,8 @@ class BTree(MultiwayTree):
         One element of the tree occupies one seventh of memory sector,
          so the dimension choosen for this implementation is 7,
         in order to fit the element"""
-        d=7
-        self._a = ceil((d-1)/2)
+        d = 7
+        self._a = ceil((d - 1) / 2)
         self._b = d
         self._root = None
         self._size = 0
@@ -88,7 +122,8 @@ class BTree(MultiwayTree):
             p._node._parent._children.insert(index_in_parent, node1)
             p._node._parent._children.insert(index_in_parent + 1, node2)
         return self._make_position(node1, 0), \
-               self._make_position(p._node._parent, node1_end_index + 1)if p._node._parent else self._make_position(self._root,0), \
+               self._make_position(p._node._parent, node1_end_index + 1) if p._node._parent else self._make_position(
+                   self._root, 0), \
                self._make_position(node2, 0)
 
     def _validate(self, p):
@@ -207,25 +242,25 @@ class BTree(MultiwayTree):
         else:
             return p
 
-    def add(self, e):
+    def _insert(self, e):
         p = self._add(e)
         return self._check_overflow(p)
 
-    def _delete(self,e):
+    def _delete(self, e):
         if self.root() is None:
             return None
-        p=self._search(e,self.root()._node)
+        p = self._search(e, self.root()._node)
         try:
-            if p.element() == e :
+            if p.element() == e:
                 if p._node._children[0] is None:
                     p._node._children.pop()
                     p._node._elements.pop(p._index)
                     return p
                 else:
-                    p_subs=self._max(p._node._children[p._index])
-                    swap=p_subs.element()
-                    self._replace(p_subs,p.element())
-                    self._replace(p,swap)
+                    p_subs = self._max(p._node._children[p._index])
+                    swap = p_subs.element()
+                    self._replace(p_subs, p.element())
+                    self._replace(p, swap)
                     p_subs._node._children.pop()
                     p_subs._node._elements.pop(p_subs._index)
                     return p_subs
@@ -234,19 +269,17 @@ class BTree(MultiwayTree):
         except IndexError as error:
             return None
 
-    def _min(self,root):
+    def _min(self, root):
         if root._node._children[0] is not None:
-            return self._min(self._make_position(root._node._children[0],0))
-        return self._make_position(root._node._elements[0],0)
+            return self._min(self._make_position(root._node._children[0], 0))
+        return self._make_position(root._node._elements[0], 0)
 
-
-
-    def _max(self,root):
+    def _max(self, root):
         if root._node._children[-1] is not None:
-            return self._max(self._make_position(root._node._children[-1],0))
-        return self._make_position(root._node._elements[-1],len(root._node._elements)-1)
+            return self._max(self._make_position(root._node._children[-1], 0))
+        return self._make_position(root._node._elements[-1], len(root._node._elements) - 1)
 
-    def _transfer(self,p_parent,p_underflow,p_transfer):
+    def _transfer(self, p_parent, p_underflow, p_transfer):
         if len(p_transfer._node._children) > self._a:
             p_underflow._node._elements.append(p_parent.element())
             self._replace(p_parent, p_transfer.element())
@@ -255,45 +288,48 @@ class BTree(MultiwayTree):
         else:
             raise ValueError("Not suitable for transfer")
 
-
-    def _fusion(self,p_parent,p_underflow,p_fusion,left=True):
-        for index in  range(0,len(p_parent._node._children)):
-            if p_parent._node._children[index]==p_underflow._node:
+    def _fusion(self, p_parent, p_underflow, p_fusion, left=True):
+        for index in range(0, len(p_parent._node._children)):
+            if p_parent._node._children[index] == p_underflow._node:
                 p_parent._node._children.pop(index)
         element = p_parent._node._elements.pop(p_parent._index)
         if left:
-            p_fusion._node._elements.insert(p_fusion._index+1,element)
-            p_fusion._node._children.insert(p_fusion._index+1,p_underflow._node._children.pop())
+            p_fusion._node._elements.insert(p_fusion._index + 1, element)
+            p_fusion._node._children.insert(p_fusion._index + 1, p_underflow._node._children.pop())
         else:
             p_fusion._node._elements.insert(p_fusion._index, element)
             p_fusion._node._children.insert(p_fusion._index, p_underflow._node._children.pop())
 
-
-    def _check_underflow(self,p):
+    def _check_underflow(self, p):
         if len(p._node._children) < self._a:
-            my_index=0
-            for index in range(0,len(p._node._parent._children)):
-                if p._node._parent._children[index]==p._node:
-                    my_index=index
+            my_index = 0
+            for index in range(0, len(p._node._parent._children)):
+                if p._node._parent._children[index] == p._node:
+                    my_index = index
                     break
-            if my_index>0 and p._node._parent._children[my_index-1] is not None:
-                p_parent=self._make_position(p._node._parent,my_index-1)
-                p_brother=self._make_position(p._node._parent._children[my_index-1],len(p._node._parent._children[my_index-1]._elements)-1)
+            if my_index > 0 and p._node._parent._children[my_index - 1] is not None:
+                p_parent = self._make_position(p._node._parent, my_index - 1)
+                p_brother = self._make_position(p._node._parent._children[my_index - 1],
+                                                len(p._node._parent._children[my_index - 1]._elements) - 1)
                 try:
-                    self._transfer(p_parent,p,p_brother)
+                    self._transfer(p_parent, p, p_brother)
                 except ValueError as error:
-                    if not my_index == len(p._node._parent._children) -1 and p._node._parent._children[my_index+1] is not None:
-                        p_brother=self._make_position(p._node._parent._children[my_index+1],len(p._node._parent._children[my_index+1]._elements)+1)
+                    if not my_index == len(p._node._parent._children) - 1 and p._node._parent._children[
+                        my_index + 1] is not None:
+                        p_brother = self._make_position(p._node._parent._children[my_index + 1],
+                                                        len(p._node._parent._children[my_index + 1]._elements) + 1)
                         try:
-                            self._transfer(p_parent,p,p_brother)
+                            self._transfer(p_parent, p, p_brother)
                         except ValueError as error:
-                            if p._node._parent._children[my_index-1] is not None:
-                                p_brother = self._make_position(p._node._parent._children[my_index - 1], len(p._node._parent._children[my_index - 1]._elements) - 1)
-                                self._fusion(p_parent,p,p_brother)
+                            if p._node._parent._children[my_index - 1] is not None:
+                                p_brother = self._make_position(p._node._parent._children[my_index - 1], len(
+                                    p._node._parent._children[my_index - 1]._elements) - 1)
+                                self._fusion(p_parent, p, p_brother)
                             else:
-                                p_brother = self._make_position(p._node._parent._children[my_index + 1], len(p._node._parent._children[my_index + 1]._elements) + 1)
-                                self._fusion(p_parent,p,p_brother)
+                                p_brother = self._make_position(p._node._parent._children[my_index + 1], len(
+                                    p._node._parent._children[my_index + 1]._elements) + 1)
+                                self._fusion(p_parent, p, p_brother)
 
-    def delete(self,e):
-        p=self._delete(e)
+    def _remove(self, e):
+        p = self._delete(e)
         return self._check_underflow(p)
