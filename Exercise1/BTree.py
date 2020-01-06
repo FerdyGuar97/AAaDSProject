@@ -1,7 +1,8 @@
-from Exercise1.multiway_tree import MultiwayTree
+from TdP_collections.tree.tree import Tree
 from math import ceil
+import array
 
-class BTree(MultiwayTree):
+class BTree(Tree):
 
     def root(self):
         return self._make_position(self._root,0)
@@ -22,7 +23,7 @@ class BTree(MultiwayTree):
             self._children = children if children else [None for i in range(0,len(elements)+1)]
 
     # -------------------------- nested Position class --------------------------
-    class Position(MultiwayTree.Position):
+    class Position(Tree.Position):
         """An abstraction representing the location of a single element."""
 
         def __init__(self, container, node, index):
