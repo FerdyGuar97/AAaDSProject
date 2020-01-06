@@ -1,6 +1,7 @@
 from Exercise1.multiway_tree import MultiwayTree
+from math import ceil
 
-class ABTree(MultiwayTree):
+class BTree(MultiwayTree):
 
     def root(self):
         return self._make_position(self._root,0)
@@ -39,12 +40,14 @@ class ABTree(MultiwayTree):
             return type(other) is type(self) and other._node is self._node and other._index == self._index
 
     # -------------------------- multiway alberi constructor --------------------------
-    def __init__(self, a, b):
-        """Create an initially empty multiway alberi."""
-        if a > b:
-            raise ValueError('a must be less than or equal to b')
-        self._a = a
-        self._b = b
+    def __init__(self):
+        """Create an initially empty multiway alberi.
+        One element of the tree occupies one seventh of memory sector,
+         so the dimension choosen for this implementation is 7,
+        in order to fit the element"""
+        d=7
+        self._a = ceil((d-1)/2)
+        self._b = d
         self._root = None
         self._size = 0
 
@@ -187,6 +190,7 @@ class ABTree(MultiwayTree):
                 return self._add_before(e_position, e)
 
     def _check_overflow(self, p):
+        "Check if the addition goes into an overflow situation"
         if len(p._node._children) > self._b:
             n1, e, n2 = self._split(p)
             if e.element() == p.element():

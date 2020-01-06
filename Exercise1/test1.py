@@ -1,8 +1,7 @@
-from Exercise1.multiway_linked_tree import ABTree
-
+from Exercise1.BTree import BTree
 
 def main():
-    tree = ABTree(2, 4)
+    tree = BTree()
     tree.add('b')
     tree.add('a')
     tree.add('e')
