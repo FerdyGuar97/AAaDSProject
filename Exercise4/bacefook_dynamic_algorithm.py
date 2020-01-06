@@ -2,13 +2,8 @@ from Exercise4.n_tree import NTree
 
 
 def bacefook_minimum_softwares(tree: NTree, root: NTree.Position, tab):
-    # La tabella deve essere intepretata come segue:
-    # Ogni colonna rappresenta un nodo figlio di root,
-    # ed in ogni cella è contenuto il numero di software
-    # installati nel relativo sotto-albero considerando
-    # tale figlio (root del sotto-albero) con il software installato
-    # se l'indice è 1 (tab[c][1]), oppure senza consideralo
-    # installato su di esso (tab[c][0])
+    """
+        method to computer the minimum number of user with software"""
 
     for c in tree.children(root):
         tab[c][True], tab[c][False] = bacefook_minimum_softwares(tree, c, tab)
@@ -19,6 +14,16 @@ def bacefook_minimum_softwares(tree: NTree, root: NTree.Position, tab):
 
 
 def bacefook_dynamic_algorithm(tree: NTree):
+    """
+        create a dict to store the number of subtree with or without the software
+
+        tab dictionary structure:
+        -Key i represents a node of the N Tree
+        -Value is a dict in which we store the number of nodes in the subtree of the keys
+         that have (eg. don't have) the software
+
+    """
+
     tab = {i: {True: 0, False: 0} for i in tree.preorder()}
     tab[tree.root()][True], tab[tree.root()][False] = bacefook_minimum_softwares(tree, tree.root(), tab)
     return tab

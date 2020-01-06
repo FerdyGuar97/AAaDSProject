@@ -3,6 +3,23 @@ from TdP_collections.priority_queue.adaptable_heap_priority_queue import Adaptab
 
 
 def bacefook_greedy_algorithm(graph: Graph):
+    """
+        greedy algorithm to compute the minimum number of nodes
+        with software
+
+        map structure:
+
+        -Key store all vertices of the graph
+        -Value is a dict
+
+            dict structure:
+
+            -token store locator from priority queue
+            -so_sw_count store the number of adj nodes
+            -has_sw bool if the node has the software
+
+        Priority queue store all the nodes of the graph ordered by number of adj nodes
+    """
     priority_queue = AdaptableHeapPriorityQueue()
     map = {}
     for v in graph.vertices():

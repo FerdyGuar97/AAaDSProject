@@ -3,29 +3,6 @@ import time
 from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
 
 
-def test(timeslice: int):
-    # first we load command from file in a
-    # auxiliary data structure
-    Producer.readAndPrint()
-    queue, loc = Producer.load("commands")
-    actProcess = queue.remove_min()[1]
-    remainingTimeSlices = actProcess.timeSlices
-
-    while True:
-        time.sleep(2)
-        if actProcess is None:
-            print("No job running")
-        else:
-            print("Executing " + actProcess.name)
-            remainingTimeSlices -= 1
-        if not queue.is_empty() and remainingTimeSlices <= 0:
-            actProcess = queue.remove_min()[1]
-            remainingTimeSlices = actProcess.timeSlices
-        elif remainingTimeSlices <= 0:
-            actProcess = None
-        queue_update(loc, queue, timeslice)
-
-
 def queue_update(waiting_times_map, queue, maxWaitingTime):
     """Update of priority of processes in the priority queue due to time waited"""
 
@@ -45,7 +22,7 @@ def queue_update(waiting_times_map, queue, maxWaitingTime):
         waiting_times_map.pop(x)
 
 
-def test2():
+def cpu_scheduler():
     """
         test class with while loop
 
@@ -87,5 +64,4 @@ def test2():
 
 
 if __name__ == '__main__':
-    # test(2)
-    test2()
+    cpu_scheduler()

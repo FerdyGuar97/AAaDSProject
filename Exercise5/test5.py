@@ -1,6 +1,5 @@
 from Exercise5.bacefook_greedy_algorithm import bacefook_greedy_algorithm
 from Exercise5.random_graph import graph_randomize
-from Exercise3.test3 import plot_graph
 
 
 def main(n: int):
@@ -12,7 +11,6 @@ def main(n: int):
             sum += 1
     print(map)
     print(sum)
-    plot_graph(graph)
 
 
 if __name__ == '__main__':

@@ -4,6 +4,7 @@ from TdP_collections.queue.array_queue import Empty
 
 def readAndPrint():
     """test method in which we open, read and print the contents of a text file"""
+
     file = open("commands", "r")
     for line in file:
         tmp = line.rstrip("\n").split(" ")
@@ -15,7 +16,7 @@ def readAndPrint():
 
 
 def loadFromFile(fileName: str):
-    """method used for load command from file into an ArrayQueue"""
+    """Load command from file into an ArrayQueue"""
 
     file = open(fileName, "r")
     queue = ArrayQueue()
