@@ -1,24 +1,24 @@
 from Exercise4.n_tree import NTree
 
 
-def bacefook_minimum_softwares(tree: NTree, root: NTree.Position, best):
+def bacefook_minimum_softwares(tree: NTree, root: NTree.Position, tab):
     # La tabella deve essere intepretata come segue:
     # Ogni colonna rappresenta un nodo figlio di root,
     # ed in ogni cella è contenuto il numero di software
     # installati nel relativo sotto-albero considerando
     # tale figlio (root del sotto-albero) con il software installato
-    # se l'indice è 1 (best[c][1]), oppure senza consideralo
-    # installato su di esso (best[c][0])
+    # se l'indice è 1 (tab[c][1]), oppure senza consideralo
+    # installato su di esso (tab[c][0])
 
     for c in tree.children(root):
-        best[c][True], best[c][False] = bacefook_minimum_softwares(tree, c, best)
+        tab[c][True], tab[c][False] = bacefook_minimum_softwares(tree, c, tab)
 
-    yes_software = sum(min(best[c][False], best[c][True]) for c in tree.children(root))
-    no_software = sum(best[c][True] for c in tree.children(root))
+    yes_software = sum(min(tab[c][False], tab[c][True]) for c in tree.children(root))
+    no_software = sum(tab[c][True] for c in tree.children(root))
     return yes_software + 1, no_software
 
 
 def bacefook_dynamic_algorithm(tree: NTree):
-    best = {i: {True: 0, False: 0} for i in tree.preorder()}
-    best[tree.root()][True], best[tree.root()][False] = bacefook_minimum_softwares(tree, tree.root(), best)
-    return best
+    tab = {i: {True: 0, False: 0} for i in tree.preorder()}
+    tab[tree.root()][True], tab[tree.root()][False] = bacefook_minimum_softwares(tree, tree.root(), tab)
+    return tab

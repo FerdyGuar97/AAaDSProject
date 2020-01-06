@@ -1,4 +1,3 @@
-# Author: Aric Hagberg (hagberg@lanl.gov)
 from time import time, sleep
 
 from TdP_collections.graphs.graph import Graph

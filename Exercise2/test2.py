@@ -23,26 +23,26 @@ def test(timeslice: int):
             remainingTimeSlices = actProcess.timeSlices
         elif remainingTimeSlices <= 0:
             actProcess = None
-        queueupdate(loc, queue, timeslice)
+        queue_update(loc, queue, timeslice)
 
 
-def queueupdate(waitingTimesMap, queue, maxWaitingTime):
+def queue_update(waiting_times_map, queue, maxWaitingTime):
     """Update of priority of processes in the priority queue due to time waited"""
 
     toRemove = []
 
-    for locator in waitingTimesMap:
-        waitingTimesMap[locator] += 1
-        if waitingTimesMap[locator] >= maxWaitingTime:
+    for locator in waiting_times_map:
+        waiting_times_map[locator] += 1
+        if waiting_times_map[locator] >= maxWaitingTime:
             if locator._value.priority >= -19:
                 locator._value.priority -= 1
             try:
                 queue.update(locator, locator._value.priority, locator._value)
-                waitingTimesMap[locator] = 0
+                waiting_times_map[locator] = 0
             except ValueError as error:
                 toRemove.append(locator)
     for x in toRemove:
-        waitingTimesMap.pop(x)
+        waiting_times_map.pop(x)
 
 
 def test2():
@@ -79,7 +79,7 @@ def test2():
         else:
             print("Executing " + actProcess.name)
             remainingTimeSlices -= 1
-        queueupdate(waitingTimesMap, scheduleQueue, x)
+        queue_update(waitingTimesMap, scheduleQueue, x)
 
         time.sleep(2)
 
