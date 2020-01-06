@@ -1,19 +1,14 @@
-from array import array
-from typing import _KT, _VT_co, _VT
-
 from Exercise1.multiway_tree import MultiwayTree
-from TdP_collections.hash_table.map_base import MapBase
 
+class ABTree(MultiwayTree):
 
-class MultiwayLinkedTree(MultiwayTree, MapBase):
-    def __setitem__(self, k: _KT, v: _VT) -> None:
-        pass
+    def root(self):
+        return self._make_position(self._root,0)
 
-    def __delitem__(self, v: _KT) -> None:
-        pass
-
-    def __getitem__(self, k: _KT) -> _VT_co:
-        pass
+    def children(self, p):
+        for c in p._node._children:
+            if c is not None:
+                yield self._make_position(c,0)
 
     # -------------------------- nested Node class --------------------------
     class _Node:
@@ -22,30 +17,8 @@ class MultiwayLinkedTree(MultiwayTree, MapBase):
 
         def __init__(self, elements, parent=None, children=None):
             self._parent = parent
-            self._elements = elements if elements else []
-            self._children = children if children else []
-
-        def _split(self):
-            """The node splits itself in two nodes and returns a tuple containing
-            those two nodes and the central element.
-            (n1 , e , n2) <- return tuple
-            """
-            node1_end_index = len(self._elements) // 2 - 1
-            node2_start_index = node1_end_index + 2
-
-            node1 = self._Node(self._elements[:node1_end_index + 1], self._parent)
-            node2 = self._Node(self._elements[node2_start_index:], self._parent)
-
-            index_in_parent = None
-            for i in range(0, len(self._parent._children)):
-                if self == self._parent._children[i]:
-                    index_in_parent = i;
-            if index_in_parent is None:
-                raise ValueError('Cannot find this node in its parent children')
-            self._parent._elements.insert(index_in_parent, self._elements[node1_end_index + 1])
-
-            self._parent._children.insert(index_in_parent, node1)
-            self._parent._children.insert(index_in_parent + 1, node2)
+            self._elements = elements
+            self._children = children if children else [None for i in range(0,len(elements)+1)]
 
     # -------------------------- nested Position class --------------------------
     class Position(MultiwayTree.Position):
@@ -66,8 +39,12 @@ class MultiwayLinkedTree(MultiwayTree, MapBase):
             return type(other) is type(self) and other._node is self._node and other._index == self._index
 
     # -------------------------- multiway alberi constructor --------------------------
-    def __init__(self):
+    def __init__(self, a, b):
         """Create an initially empty multiway alberi."""
+        if a > b:
+            raise ValueError('a must be less than or equal to b')
+        self._a = a
+        self._b = b
         self._root = None
         self._size = 0
 
@@ -81,6 +58,36 @@ class MultiwayLinkedTree(MultiwayTree, MapBase):
         return len(p._node._children)
 
     # ------------------------------- utility methods -------------------------------
+    def _split(self, p):
+        """The node splits itself in two nodes and returns a tuple containing
+        those two nodes and the central element.
+        (n1[2] , e , n2[0]) <- return tuple in terms of positions
+        """
+        node1_end_index = len(p._node._elements) // 2 - 1
+        node2_start_index = node1_end_index + 2
+
+        node1 = self._Node(p._node._elements[:node1_end_index + 1], p._node._parent)
+        node2 = self._Node(p._node._elements[node2_start_index:], p._node._parent)
+
+        # Root case, parent is None
+        if p._node._parent is None:
+            new_root = self._Node([p._node._elements[node1_end_index + 1]], None, [node1, node2])
+            self._root = new_root
+        else:
+            index_in_parent = None
+            for i in range(0, len(p._node._parent._children)):
+                if p._node == p._node._parent._children[i]:
+                    index_in_parent = i;
+            if index_in_parent is None:
+                raise ValueError('Cannot find this node in its parent children')
+            p._node._parent._elements.insert(index_in_parent, p._node._elements[node1_end_index + 1])
+
+            p._node._parent._children.insert(index_in_parent, node1)
+            p._node._parent._children.insert(index_in_parent + 1, node2)
+        return self._make_position(node1, 0), \
+               self._make_position(p._node._parent, node1_end_index + 1)if p._node._parent else self._make_position(self._root,0), \
+               self._make_position(node2, 0)
+
     def _validate(self, p):
         """Return associated node, if position is valid."""
         if not isinstance(p, self.Position):
@@ -128,7 +135,8 @@ class MultiwayLinkedTree(MultiwayTree, MapBase):
         """
         node, index = self._validate(p)
         self._size += 1
-        node._children.insert(index, e)
+        node._elements.insert(index, e)
+        node._children.append(None)
         return self._make_position(node, index)
 
     def _add_after(self, p, e):
@@ -141,7 +149,7 @@ class MultiwayLinkedTree(MultiwayTree, MapBase):
         node, index = self._validate(p)
         index += 1
         self._size += 1
-        node._children.insert(index, e)
+        node._elements.insert(index, e)
         return self._make_position(node, index)
 
     def _search(self, e, starting_vertex):
@@ -167,10 +175,34 @@ class MultiwayLinkedTree(MultiwayTree, MapBase):
         Return its Position"""
 
         if self._root is None:
-            self._add_root(e)
+            return self._add_root(e)
         else:
             e_position = self._search(e, self._root)
-            if e == e_position.element():
-                return e_position
+            try:
+                if e == e_position.element():
+                    return e_position
+                else:
+                    return self._add_before(e_position, e)
+            except IndexError:
+                return self._add_before(e_position, e)
+
+    def _check_overflow(self, p):
+        if len(p._node._children) > self._b:
+            n1, e, n2 = self._split(p)
+            if e.element() == p.element():
+                return self._check_overflow(e)
             else:
-                self._add_before(e_position, e)
+                self._check_overflow(e)
+                for i in range(0, len(n1._node._elements)):
+                    if p.element() == n1._node._elements[i]:
+                        return self._make_position(n1._node, i)
+                for i in range(0, len(n2._node._elements)):
+                    if p.element() == n2._node._elements[i]:
+                        return self._make_position(n2._node, i)
+                raise ValueError('something went wrong, cannot find the element')
+        else:
+            return p
+
+    def add(self, e):
+        p = self._add(e)
+        return self._check_overflow(p)
